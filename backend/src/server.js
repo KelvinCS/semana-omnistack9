@@ -1,18 +1,24 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const routes = require("./routes");
+const express = require('express')
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+const routes = require('./routes')
 
-const app = express();
+dotenv.config({
+  path: process.env.NODE_ENV === 'development' ? '.env.dev' : '.env'
+})
 
-const mongodbURI =
-  "mongodb+srv://omnistack:omnistack@omnistack-jyrl4.mongodb.net/test?retryWrites=true&w=majority";
+const app = express()
+
+const mongodbURI = process.env.MONGO_URL
 
 mongoose.connect(mongodbURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-});
+})
 
-app.use(express.json());
-app.use(routes);
+app.use(express.json())
+app.use(routes)
 
-app.listen(3333);
+app.listen(process.env.PORT, () =>
+  console.log(`Listening on ${process.env.PORT}`)
+)
